@@ -3,7 +3,7 @@ const MAPBOX_TOKEN =
   // For security reasons, please avoid using the default public token provided by Mapbox as much as possible.
   // Instead, manually add a new token and apply URL restrictions.
   // (please refer to https://github.com/yihong0618/running_page/issues/643#issuecomment-2042668580)
-  'pk.eyJ1IjoieWlob25nMDYxOCIsImEiOiJjbWYxdXR4YncwMTJtMm5zOTE4eTZpMGdtIn0.OnsXdwkZFztR8a5Ph_T-xg';
+  'pk.eyJ1IjoiYWppZXc0MiIsImEiOiJja3g0ZmtjOXYwNWsxMnZwYWtpdGd5YWJ3In0.Rqhlg8V2Iz1Gelotxfil4w';
 const MUNICIPALITY_CITIES_ARR = [
   '北京市',
   '上海市',
@@ -28,9 +28,9 @@ const MAP_LAYER_LIST = [
 ];
 
 // styling: set to `true` if you want dash-line route
-const USE_DASH_LINE = true;
+const USE_DASH_LINE = false;
 // styling: route line opacity: [0, 1]
-const LINE_OPACITY = 0.4;
+const LINE_OPACITY = 1;
 // styling: map height - responsive design
 // Use smaller height on mobile devices for better user experience
 const MAP_HEIGHT = window.innerWidth <= 768 ? 250 : 600;
@@ -41,11 +41,11 @@ const ROAD_LABEL_DISPLAY = true;
 const PRIVACY_MODE = false;
 // updated on 2024/11/17: lights are turned off by default
 //set to `false` if you want to make light off as default, only effect when `PRIVACY_MODE` = false
-const LIGHTS_ON = false;
+const LIGHTS_ON = true;
 //set to `true` if you want to show the 'Elevation Gain' column
 const SHOW_ELEVATION_GAIN = false;
 // richer title for the activity types (like garmin style)
-const RICH_TITLE = false;
+const RICH_TITLE = true;
 
 // IF you are outside China please make sure IS_CHINESE = false
 const IS_CHINESE = true;
@@ -59,7 +59,7 @@ const ENGLISH_INFO_MESSAGE = (yearLength: number, year: string): string =>
 
 // English is not supported for location info messages yet
 const CHINESE_LOCATION_INFO_MESSAGE_FIRST =
-  '跑过了一些地方，希望随着时间推移，点亮的地方越来越多';
+  '跑过了一些地方，希望随着时间推移，点亮的地方越来越多。';
 const CHINESE_LOCATION_INFO_MESSAGE_SECOND = '不要停下来，不要停下奔跑的脚步';
 
 const INFO_MESSAGE = IS_CHINESE ? CHINESE_INFO_MESSAGE : ENGLISH_INFO_MESSAGE;
@@ -165,7 +165,7 @@ export {
   INVALID_ROUTE_DATA,
 };
 
-const nike = 'rgb(224,237,94)'; // if you want to change the main color, modify this value in src/styles/variables.scss
+const nike = 'rgb(98, 209, 221)';
 const dark_vanilla = 'rgb(228,212,220)';
 
 // If your map has an offset please change this line

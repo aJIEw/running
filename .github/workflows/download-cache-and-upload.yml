@@ -1,0 +1,53 @@
+name: Download cache and Upload
+
+on:
+  workflow_dispatch:
+    inputs:
+      cache_key:
+        description: 'Cache key'
+        required: true
+        type: string
+      artifact_name:
+        description: 'Artifact name'
+        required: false
+        default: cache-artifact
+        type: string
+
+jobs:
+  cache-upload:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Restore cache
+        uses: actions/cache/restore@v5
+        with:
+          path: |
+            activities
+            assets/*.svg
+            GPX_OUT
+            TCX_OUT
+            FIT_OUT
+            Workouts
+            run_page/data.db
+            src/static/activities.json
+            imported.json
+          key: ${{ github.event.inputs.cache_key }}
+          fail-on-cache-miss: true
+
+      - name: Upload cache as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ github.event.inputs.artifact_name }}
+          path: |
+            activities
+            assets/*.svg
+            GPX_OUT
+            TCX_OUT
+            FIT_OUT
+            Workouts
+            run_page/data.db
+            src/static/activities.json
+            imported.json
+          if-no-files-found: error

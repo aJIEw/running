@@ -122,7 +122,7 @@ export const hslToRgb = (
  * @returns The current effective theme
  */
 export const getCurrentTheme = (): 'light' | 'dark' => {
-  if (typeof window === 'undefined') return 'dark';
+  if (typeof window === 'undefined') return 'light';
 
   const dataTheme = document.documentElement.getAttribute('data-theme');
   const savedTheme = localStorage.getItem('theme');
@@ -136,8 +136,8 @@ export const getCurrentTheme = (): 'light' | 'dark' => {
     return savedTheme;
   }
 
-  // Default to dark theme
-  return 'dark';
+  // Default to light theme
+  return 'light';
 };
 
 /**

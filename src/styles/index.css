@@ -7,7 +7,7 @@
 
 :root {
   /* global */
-  --color-primary: var(--color-brand);
+  --color-primary: #62d1dd;
   --color-secondary: var(--color-secondary);
   --color-background: var(--color-bg);
   --color-text-primary: var(--color-tx);
@@ -81,7 +81,7 @@
   --color-run-row-hover-background: var(--color-neutral-200);
   --color-activity-card: var(--color-neutral-300);
   --svg-color-inactive-cell: var(--color-neutral-600);
-  --svg-color-active-cell: var(--color-neutral-400);
+  --svg-color-active-cell: #00BFFF;
   --svg-special-color: #d4a574;
   --svg-special-color2: #c5756b;
   --font-sans: 'IBM Plex Sans', sans-serif;
@@ -100,7 +100,7 @@
   --color-run-table-thead: var(--color-zinc-300);
   --color-run-row-hover-background: var(--color-neutral-800);
   --color-activity-card: var(--color-neutral-700);
-  --svg-color-active-cell: #4dd2ff;
+  --svg-color-active-cell: #00BFFF;
   --svg-special-color: #f7d02c;
   --svg-special-color2: #f56c6c;
   --font-sans: 'IBM Plex Sans', sans-serif;
@@ -145,9 +145,12 @@ hr {
 }
 
 .github-svg text,
-.grid-svg text,
-.year-svg text {
+.grid-svg text {
   fill: var(--color-run-date);
+}
+
+.year-svg text {
+  fill: #e3ed74;
 }
 
 .svg-color-bg {

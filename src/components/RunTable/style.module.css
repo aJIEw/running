@@ -92,12 +92,13 @@
   }
 
   &:hover {
-    background-color: var(--color-run-row-hover-background);
+    background-color: lighten(rgb(43, 43, 43), 3%);
   }
 }
 
 .selected {
   color: var(--color-primary);
+  font-weight: 700;
 }
 
 .tableContainer {

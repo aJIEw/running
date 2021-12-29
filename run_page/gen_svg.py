@@ -93,8 +93,8 @@ def main():
         dest="background_color",
         metavar="COLOR",
         type=str,
-        default="#222222",
-        help='Background color of poster (default: "#222222").',
+        default="#191A1C",
+        help='Background color of poster (default: "#191A1C").',
     )
     args_parser.add_argument(
         "--track-color",
@@ -284,16 +284,6 @@ def main():
     if args.type == "github":
         p.height = 55 + p.years.real_year * 43
     p.github_style = args.github_style
-
-    if args.type == "circular":
-        if args.background_color == "#222222":
-            p.colors["background"] = "#1a1a1a"
-        if args.track_color == "#4DD2FF":
-            p.colors["track"] = "red"
-        if args.special_color == "#FFFF00":
-            p.colors["special"] = "yellow"
-        if args.text_color == "#FFFFFF":
-            p.colors["text"] = "#e1ed5e"
 
     # for special circular
     if is_circular:

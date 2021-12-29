@@ -58,7 +58,7 @@ jobs:
         with:
           path: |
             activities
-            assets
+            assets/*.svg
             GPX_OUT
             TCX_OUT
             FIT_OUT
@@ -75,6 +75,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
+
       - name: Enable corepack
         run: npm install -g corepack@latest && corepack enable pnpm
 
@@ -93,6 +94,7 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install
+
       - name: Build
         env:
           REPO_NAME: ${{ github.event.repository.name }}
@@ -104,6 +106,7 @@ jobs:
           # Upload dist repository
           name: pages-artifact
           path: './dist'
+
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4

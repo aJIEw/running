@@ -111,6 +111,9 @@ class Poster:
         width = self.width
         if self.drawer_type == "plain":
             height = height - 100
+            self.colors["track"] = "red"
+            self.colors["special"] = "yellow"
+            self.colors["text"] = "#e1ed5e"
         if self.drawer_type == "year_summary":
             # Year summary has its own layout, use full size
             height = height

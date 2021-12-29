@@ -82,7 +82,7 @@ const useRunHashId = () =>
   useSyncExternalStore(subscribeToRunHash, getRunIdFromHash, () => null);
 
 const Index = () => {
-  const { siteTitle, siteUrl } = getSiteMetadata();
+  const { pageTitle, siteUrl } = getSiteMetadata();
   const { activities, thisYear } = useActivities();
   const themeChangeCounter = useThemeChangeCounter();
   const [year, setYear] = useState(thisYear);
@@ -180,7 +180,8 @@ const Index = () => {
       name: string,
       func: (_run: Activity, _value: string) => boolean
     ) => {
-      scrollToMap();
+      // Customized: we don't want the scroll to top effect when button is clicked
+      // scrollToMap();
       if (name != 'Year') {
         setYear(thisYear);
       }
@@ -412,7 +413,7 @@ const Index = () => {
       </Helmet>
       <div className="w-full lg:w-1/3">
         <h1 className="my-12 mt-6 text-5xl font-extrabold italic">
-          <a href={siteUrl}>{siteTitle}</a>
+          <a href={siteUrl}>{pageTitle}</a>
         </h1>
         {(viewState.zoom ?? 0) <= 3 && IS_CHINESE ? (
           <LocationStat
