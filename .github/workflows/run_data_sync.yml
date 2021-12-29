@@ -27,9 +27,9 @@ env:
   # please change to your own config.
   RUN_TYPE: only_gpx # support strava/nike/garmin/coros/garmin_cn/garmin_sync_cn_global/keep/only_gpx/only_fit/nike_to_strava/strava_to_garmin/tcx_to_garmin/strava_to_garmin_cn/garmin_to_strava/garmin_to_strava_cn/codoon/oppo, Please change the 'pass' it to your own
   ATHLETE: aJIEw
-  TITLE: Running
-  MIN_GRID_DISTANCE: 5 # change min distance here
-  TITLE_GRID: Over 5km Runs # also here
+  TITLE: aJIEw's Running by Year
+  MIN_GRID_DISTANCE: 5
+  TITLE_GRID: aJIEw's Running Routes
   GITHUB_NAME: aJIEw
   GITHUB_EMAIL: ajiew42@gmail.com
 
@@ -230,6 +230,7 @@ jobs:
           python run_page/save_to_parqent.py
 
       - name: Push new runs
+<<<<<<< HEAD
         if: env.SAVE_DATA_IN_GITHUB_CACHE != 'true'
         run: |
           git config --local user.email "action@github.com"
@@ -258,3 +259,13 @@ jobs:
       data_cache_prefix: ${{needs.sync.outputs.DATA_CACHE_PREFIX}}
     needs:
       - sync
+=======
+        uses: github-actions-x/commit@v2.6
+        with:
+          github-token: ${{ secrets.MY_GITHUB_TOKEN }}
+          commit-message: "Add new runs"
+          files: activities src/static/ scripts/ assets/ GPX_OUT/
+          rebase: 'true'
+          name: ${{ env.GITHUB_NAME }}
+          email: ${{ env.GITHUB_EMAIL }}
+>>>>>>> 343e3c51 (update config and regenerate data)
