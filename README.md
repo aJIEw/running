@@ -1,6 +1,6 @@
 # aJIEw's Running Page
 
-### 生成数据
+### 手动生成数据
 
 年度数据：
 
