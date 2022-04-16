@@ -229,6 +229,9 @@ jobs:
           pip install duckdb==1.1.0
           python run_page/save_to_parqent.py
 
+      - name: work around permission issue
+        run: git config --global --add safe.directory /github/workspace
+
       - name: Push new runs
         if: env.SAVE_DATA_IN_GITHUB_CACHE != 'true'
         run: |
