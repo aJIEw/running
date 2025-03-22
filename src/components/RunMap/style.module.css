@@ -12,6 +12,7 @@
   left: 10px;
   margin: 0 auto;
   padding-right: 70px;
+  font-weight: 500;
 }
 
 .button {
@@ -26,7 +27,8 @@
 }
 
 .selected {
-  color: rgb(224, 237, 94);
+  font-weight: 700;
+  color: rgb(98, 209, 221);
 }
 
 .runTitle {

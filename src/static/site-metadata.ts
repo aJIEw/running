@@ -3,6 +3,7 @@ interface ISiteMetadataResult {
   siteUrl: string;
   description: string;
   logo: string;
+  pageTitle: string;
   navLinks: {
     name: string;
     url: string;
@@ -10,18 +11,19 @@ interface ISiteMetadataResult {
 }
 
 const data: ISiteMetadataResult = {
-  siteTitle: 'Running Page',
-  siteUrl: 'https://yihong.run',
-  logo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTtc69JxHNcmN1ETpMUX4dozAgAN6iPjWalQ&usqp=CAU',
-  description: 'Personal site and blog',
+  siteTitle: 'aJIEw\'s Running Page',
+  siteUrl: 'https://ajiew.github.io',
+  logo: 'https://avatars1.githubusercontent.com/u/13328707?s=200&v=4',
+  description: 'My Running Journey',
+  pageTitle: 'Running',
   navLinks: [
     {
-      name: 'Blog',
-      url: 'https://github.com/yihong0618/gitblog',
+      name: '👋 ME',
+      url: 'https://ajiew.github.io',
     },
     {
-      name: 'About',
-      url: 'https://github.com/yihong0618/running_page/blob/master/README-CN.md',
+      name: '👏 SOURCE',
+      url: 'https://github.com/yihong0618/running_page',
     },
   ],
 };

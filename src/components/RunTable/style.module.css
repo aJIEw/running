@@ -36,12 +36,13 @@
   }
 
   &:hover {
-    background-color: lighten(rgb(26, 26, 26), 3%);
+    background-color: lighten(rgb(43, 43, 43), 3%);
   }
 }
 
 .selected {
-  color: red;
+  color: rgb(98, 209, 221);
+  font-weight: 700;
 }
 
 .tableContainer {
