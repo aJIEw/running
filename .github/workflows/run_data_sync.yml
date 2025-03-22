@@ -235,7 +235,7 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add .
-          git commit -m 'update new runs' || echo "nothing to commit"
+          git commit -m 'Add new runs' || echo "nothing to commit"
           git push || echo "nothing to push"
 
       - name: Set Output
