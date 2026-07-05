@@ -12,6 +12,7 @@ yarn-error.log
 .sass-cache/
 _posts/
 _site/
+.pnpm-store
 
 .mypy_cache
 
