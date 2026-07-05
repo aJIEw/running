@@ -36,14 +36,14 @@ env:
 
   # IGNORE_BEFORE_SAVING: True # if you want to ignore some data before saving, set this to True
   IGNORE_START_END_RANGE: 10 # Unit meter
-  # Dont making this huge, just picking points you needing. https://developers.google.com/maps/documentation/utilities/polylineutility using this tool to making your polyline
+  # Don't make this huge; pick only the points you need. https://developers.google.com/maps/documentation/utilities/polylineutility Use this tool to make your polyline
   #IGNORE_POLYLINE: 'ktjrFoemeU~IorGq}DeB'
   #IGNORE_RANGE: 10 # Unit meter
   USE_CLOUDFLARE_WARP: false # If you want to use Cloudflare WARP to bypass network restrictions, set it to `true`. Currently only Garmin needs this.
   SAVE_DATA_IN_GITHUB_CACHE: true # if you deploy in the vercel, check the README
   DATA_CACHE_PREFIX: 'track_data'
-  BUILD_GH_PAGES: true # If you do not need GitHub Page please set it to `false`
-  SAVE_TO_PARQENT: true # If you want to save the data to the repo, set it to `true`
+  BUILD_GH_PAGES: true # If you do not need GitHub Pages please set it to `false`
+  SAVE_TO_PARQUET: true # If you want to save the data to the repo, set it to `true`
   GENERATE_MONTH_OF_LIFE: false # If you want to generate the month of life, set it to `true`
   BIRTHDAY_MONTH: 1989-03 # If you want to generate the month of life, set it to your birthday month, format is YYYY-MM
 
@@ -264,11 +264,11 @@ jobs:
         run: |
           python run_page/gen_svg.py --from-db --type year_summary --output assets/year_summary.svg --athlete "${{ env.ATHLETE }}"
 
-      - name: Save data to parqent
-        if: env.SAVE_TO_PARQENT == 'true'
+      - name: Save data to parquet
+        if: env.SAVE_TO_PARQUET == 'true'
         run: |
           pip install duckdb==1.1.0
-          python run_page/save_to_parqent.py
+          python run_page/save_to_parquet.py
 
       - name: Disconnect Cloudflare WARP
         if: env.USE_CLOUDFLARE_WARP == 'true'
@@ -297,7 +297,7 @@ jobs:
 
   publish_github_pages:
     if: needs.sync.result == 'success' && needs.sync.outputs.BUILD_GH_PAGES == 'true'
-    name: Build and publish Github Pages
+    name: Build and publish GitHub Pages
     uses: ./.github/workflows/gh-pages.yml
     with:
       save_data_in_github_cache: ${{needs.sync.outputs.SAVE_DATA_IN_GITHUB_CACHE == 'true'}}

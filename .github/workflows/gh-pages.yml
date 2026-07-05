@@ -50,7 +50,7 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
 
-      - name: Cache Data Files
+      - name: Restore Cached Data Files
         if: inputs.save_data_in_github_cache
         uses: actions/cache@v4
         with:
