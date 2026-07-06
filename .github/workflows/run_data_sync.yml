@@ -55,6 +55,7 @@ jobs:
       SAVE_DATA_IN_GITHUB_CACHE: ${{ steps.set_output.outputs.SAVE_DATA_IN_GITHUB_CACHE }}
       DATA_CACHE_PREFIX: ${{ steps.set_output.outputs.DATA_CACHE_PREFIX }}
       BUILD_GH_PAGES: ${{ steps.set_output.outputs.BUILD_GH_PAGES }}
+      DATA_CHANGED: ${{ steps.set_output.outputs.DATA_CHANGED }}
 
     steps:
       - name: Checkout
@@ -112,6 +113,22 @@ jobs:
           restore-keys: |
             ${{ env.DATA_CACHE_PREFIX }}-${{ github.sha }}-
             ${{ env.DATA_CACHE_PREFIX }}-
+
+      - name: Capture data fingerprint before sync
+        id: data_before
+        shell: bash
+        run: |
+          {
+            for path in activities GPX_OUT TCX_OUT FIT_OUT Workouts run_page/data.db src/static/activities.json imported.json; do
+              if [ -d "$path" ]; then
+                find "$path" -type f -print0
+              elif [ -f "$path" ]; then
+                printf '%s\0' "$path"
+              fi
+            done
+            find assets -maxdepth 1 -type f -name '*.svg' -print0 2>/dev/null || true
+          } | sort -z | xargs -0 -r sha256sum > "$RUNNER_TEMP/data-before.sha256"
+          echo "fingerprint=$(sha256sum "$RUNNER_TEMP/data-before.sha256" | awk '{print $1}')" >> "$GITHUB_OUTPUT"
 
       - name: Run sync Nike script
         if: env.RUN_TYPE == 'nike'
@@ -275,6 +292,27 @@ jobs:
         run: |
           warp-cli --accept-tos disconnect
 
+      - name: Check data changes
+        id: data_changes
+        shell: bash
+        run: |
+          {
+            for path in activities GPX_OUT TCX_OUT FIT_OUT Workouts run_page/data.db src/static/activities.json imported.json; do
+              if [ -d "$path" ]; then
+                find "$path" -type f -print0
+              elif [ -f "$path" ]; then
+                printf '%s\0' "$path"
+              fi
+            done
+            find assets -maxdepth 1 -type f -name '*.svg' -print0 2>/dev/null || true
+          } | sort -z | xargs -0 -r sha256sum > "$RUNNER_TEMP/data-after.sha256"
+          after_fingerprint=$(sha256sum "$RUNNER_TEMP/data-after.sha256" | awk '{print $1}')
+          if [ "${{ steps.data_before.outputs.fingerprint }}" != "$after_fingerprint" ]; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Push new runs
         if: env.SAVE_DATA_IN_GITHUB_CACHE != 'true'
         run: |
@@ -290,13 +328,15 @@ jobs:
           SAVE_DATA_IN_GITHUB_CACHE: ${{ env.SAVE_DATA_IN_GITHUB_CACHE }}
           DATA_CACHE_PREFIX: ${{ env.DATA_CACHE_PREFIX }}
           BUILD_GH_PAGES: ${{ env.BUILD_GH_PAGES }}
+          DATA_CHANGED: ${{ steps.data_changes.outputs.changed }}
         run: |
           echo "SAVE_DATA_IN_GITHUB_CACHE=$SAVE_DATA_IN_GITHUB_CACHE" >> "$GITHUB_OUTPUT"
           echo "DATA_CACHE_PREFIX=$DATA_CACHE_PREFIX" >> "$GITHUB_OUTPUT"
           echo "BUILD_GH_PAGES=$BUILD_GH_PAGES" >> "$GITHUB_OUTPUT"
+          echo "DATA_CHANGED=$DATA_CHANGED" >> "$GITHUB_OUTPUT"
 
   publish_github_pages:
-    if: needs.sync.result == 'success' && needs.sync.outputs.BUILD_GH_PAGES == 'true'
+    if: needs.sync.result == 'success' && needs.sync.outputs.BUILD_GH_PAGES == 'true' && needs.sync.outputs.DATA_CHANGED == 'true'
     name: Build and publish GitHub Pages
     uses: ./.github/workflows/gh-pages.yml
     with:
