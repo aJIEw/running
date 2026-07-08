@@ -114,20 +114,24 @@ jobs:
             ${{ env.DATA_CACHE_PREFIX }}-${{ github.sha }}-
             ${{ env.DATA_CACHE_PREFIX }}-
 
-      - name: Capture data fingerprint before sync
+      - name: Capture activity ids before sync
         id: data_before
         shell: bash
         run: |
-          {
-            for path in activities GPX_OUT TCX_OUT FIT_OUT Workouts run_page/data.db src/static/activities.json imported.json; do
-              if [ -d "$path" ]; then
-                find "$path" -type f -print0
-              elif [ -f "$path" ]; then
-                printf '%s\0' "$path"
-              fi
-            done
-            find assets -maxdepth 1 -type f -name '*.svg' -print0 2>/dev/null || true
-          } | sort -z | xargs -0 -r sha256sum > "$RUNNER_TEMP/data-before.sha256"
+          python - <<'PY' > "$RUNNER_TEMP/data-before.sha256"
+          import hashlib
+          import pathlib
+          import sqlite3
+
+          db_path = pathlib.Path("run_page/data.db")
+          digest = hashlib.sha256()
+          if db_path.exists():
+              with sqlite3.connect(db_path) as conn:
+                  for (run_id,) in conn.execute("SELECT run_id FROM activities ORDER BY run_id"):
+                      digest.update(str(run_id).encode())
+                      digest.update(b"\0")
+          print(digest.hexdigest())
+          PY
           echo "fingerprint=$(sha256sum "$RUNNER_TEMP/data-before.sha256" | awk '{print $1}')" >> "$GITHUB_OUTPUT"
 
       - name: Run sync Nike script
@@ -292,22 +296,27 @@ jobs:
         run: |
           warp-cli --accept-tos disconnect
 
-      - name: Check data changes
+      - name: Check new activity ids
         id: data_changes
         shell: bash
         run: |
-          {
-            for path in activities GPX_OUT TCX_OUT FIT_OUT Workouts run_page/data.db src/static/activities.json imported.json; do
-              if [ -d "$path" ]; then
-                find "$path" -type f -print0
-              elif [ -f "$path" ]; then
-                printf '%s\0' "$path"
-              fi
-            done
-            find assets -maxdepth 1 -type f -name '*.svg' -print0 2>/dev/null || true
-          } | sort -z | xargs -0 -r sha256sum > "$RUNNER_TEMP/data-after.sha256"
+          python - <<'PY' > "$RUNNER_TEMP/data-after.sha256"
+          import hashlib
+          import pathlib
+          import sqlite3
+
+          db_path = pathlib.Path("run_page/data.db")
+          digest = hashlib.sha256()
+          if db_path.exists():
+              with sqlite3.connect(db_path) as conn:
+                  for (run_id,) in conn.execute("SELECT run_id FROM activities ORDER BY run_id"):
+                      digest.update(str(run_id).encode())
+                      digest.update(b"\0")
+          print(digest.hexdigest())
+          PY
           after_fingerprint=$(sha256sum "$RUNNER_TEMP/data-after.sha256" | awk '{print $1}')
           if [ "${{ steps.data_before.outputs.fingerprint }}" != "$after_fingerprint" ]; then
+            diff -u "$RUNNER_TEMP/data-before.sha256" "$RUNNER_TEMP/data-after.sha256" || true
             echo "changed=true" >> "$GITHUB_OUTPUT"
           else
             echo "changed=false" >> "$GITHUB_OUTPUT"
