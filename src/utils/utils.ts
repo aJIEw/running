@@ -221,7 +221,8 @@ const getActivitySport = (act: Activity): string => {
 };
 
 const titleForRun = (run: Activity): string => {
-  if (RICH_TITLE) {
+  const isDefaultKeepRunTitle = run.name === 'Run from keep';
+  if (RICH_TITLE && !isDefaultKeepRunTitle) {
     // 1. try to use user defined name
     if (run.name != '') {
       return run.name;
@@ -242,18 +243,23 @@ const titleForRun = (run: Activity): string => {
   if (runDistance >= 40) {
     return RUN_TITLES.FULL_MARATHON_RUN_TITLE;
   }
-  if (runHour >= 0 && runHour <= 10) {
+  // From 5am to 11am, morning run
+  if (runHour >= 5 && runHour < 11) {
     return RUN_TITLES.MORNING_RUN_TITLE;
   }
-  if (runHour > 10 && runHour <= 14) {
+  // From 11am to 2pm, midday run
+  if (runHour >= 11 && runHour < 14) {
     return RUN_TITLES.MIDDAY_RUN_TITLE;
   }
-  if (runHour > 14 && runHour <= 18) {
+  // From 2pm to 6pm, afternoon run
+  if (runHour >= 14 && runHour < 18) {
     return RUN_TITLES.AFTERNOON_RUN_TITLE;
   }
-  if (runHour > 18 && runHour <= 21) {
+  // From 6pm to 8pm, evening run
+  if (runHour >= 18 && runHour < 20) {
     return RUN_TITLES.EVENING_RUN_TITLE;
   }
+  // Starting from 8pm, night run
   return RUN_TITLES.NIGHT_RUN_TITLE;
 };
 
